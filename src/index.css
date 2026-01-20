@@ -1,1 +1,28 @@
+@import "tailwindcss";
+
+html,
+body {
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+#root {
+  height: 100%;
+  background-color: #1118270d;
+}
+
+#header {
+  height: 96px;
+}
+
+#main {
+  min-height: calc(100vh - 192px);
+}
+
+#footer {
+  height: 96px;
+}
 
