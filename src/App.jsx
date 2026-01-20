@@ -6,7 +6,6 @@ function App() {
 
   const FNL_LOGO_URL = window.location.origin + '/fnl_logo.png';
   const SIZE = 1024;
-  console.log(FNL_LOGO_URL);
 
   const editorRef = useRef(null);
   const canvasRef = useRef(null);
