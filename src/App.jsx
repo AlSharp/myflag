@@ -128,10 +128,6 @@ function App() {
   }
 
   const downloadAvatar = () => {
-
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-    !window.MSStream;
-
     const exportCanvas = document.createElement('canvas');
     exportCanvas.width = SIZE;
     exportCanvas.height = SIZE;
@@ -141,21 +137,16 @@ function App() {
     ctx.drawImage(logoOverlayRef.current, 0, 0);
     ctx.drawImage(flagOverlayRef.current, 0, 0);
 
-    if (isIOS) {
-      const dataUrl = exportCanvas.toDataURL("image/png");
-      window.open(dataUrl, '_blank');
-    } else {
-      exportCanvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
+    exportCanvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'my_avatar.png';
-        a.click();
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'my_avatar.png';
+      a.click();
 
-        URL.revokeObjectURL(url);
-      })
-    }
+      URL.revokeObjectURL(url);
+    })
   }
 
   return (
