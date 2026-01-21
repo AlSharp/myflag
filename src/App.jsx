@@ -142,7 +142,7 @@ function App() {
     ctx.drawImage(flagOverlayRef.current, 0, 0);
 
     if (isIOS) {
-      const dataUrl = canvas.toDataURL("image/png");
+      const dataUrl = exportCanvas.toDataURL("image/png");
       window.open(dataUrl, '_blank');
     } else {
       exportCanvas.toBlob((blob) => {
