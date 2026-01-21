@@ -1,10 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import Dropzone from 'react-dropzone';
 import AvatarEditor from 'react-avatar-editor';
+import classNames from 'classnames';
 
 function App() {
 
   const FNL_LOGO_URL = window.location.origin + '/fnl_logo.png';
+  const LOGO_COLORS = [
+    { name: 'black', code: '#000000' },
+    { name: 'white', code: '#ffffff' },
+    { name: 'red', code: '#d62828' },
+  ];
   const SIZE = 512;
   const FLAG_HEIGHT = 110;
   const FLAG_WIDTH = 220;
@@ -14,6 +20,17 @@ function App() {
     { name: 'Башкортостан', image: 'bashkortostan.png' },
     { name: 'Татарстан', image: 'tatarstan.jpg' },
     { name: 'Бурятия', image: 'buryatia.png' },
+    { name: 'Бурят-Монголия', image: 'buryat-mongolia.png' },
+    { name: 'Эрзян Мастор', image: 'erzya.png' },
+    { name: 'Мокшень Мастор', image: 'moksha.png' },
+    { name: 'Саха', image: 'sakha.png' },
+    { name: 'Саха 1992', image: 'sakha-1992.png' },
+    { name: 'Ингрия', image: 'ingria.png' },
+    { name: 'Балтийская', image: 'baltia.jpeg' },
+    { name: 'Черкессия', image: 'circassia.png' },
+    { name: 'Ичкерия', image: 'ichkeria.png' },
+    { name: 'Тыва', image: 'tyva.svg' },
+    { name: 'Алтай', image: 'altai.png' },
   ]
 
   const editorRef = useRef(null);
@@ -24,6 +41,8 @@ function App() {
   const [scale, setScale] = useState(1);
   const [flag, setFlag] = useState('');
   const [flagImage, setFlagImage] = useState(null);
+  const [logo, setLogo] = useState(null);
+  const [logoColor, setLogoColor] = useState(LOGO_COLORS[0]);
 
   useEffect(() => {
     drawLogo();
@@ -31,6 +50,11 @@ function App() {
       canvasRef.current = editorRef.current.canvas.current;
     }
   }, []);
+
+  useEffect(() => {
+    if (!logo) return;
+    recolorLogo();
+  }, [logo, logoColor])
 
   useEffect(() => {
     if (flag === '') {
@@ -75,8 +99,24 @@ function App() {
     logo.onload = () => {
       const canvas = logoOverlayRef.current;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(logo, 15, 150, logo.width, logo.height);
+      ctx.drawImage(logo, 20, 150, logo.width, logo.height);
+      setLogo(logo);
     };
+  }
+
+  const recolorLogo = () => {
+    const canvas = logoOverlayRef.current;
+    const ctx = canvas.getContext('2d');
+
+    ctx.save();
+
+    ctx.drawImage(logo, 20, 150, logo.width, logo.height);
+
+    ctx.globalCompositeOperation = "source-in";
+    ctx.fillStyle = logoColor.code;
+    ctx.fillRect(20, 150, logo.width, logo.height);
+
+    ctx.restore();
   }
 
   const clearImage = () => {
@@ -84,6 +124,7 @@ function App() {
     setScale(1);
     setFlagImage(null);
     setFlag('');
+    setLogoColor(LOGO_COLORS[0]);
   }
 
   const downloadAvatar = () => {
@@ -158,7 +199,23 @@ function App() {
           </Dropzone>
         </div>
         <div className="flex flex-col items-center mt-8">
-          <div className="mb-4 w-64">
+          <div className="flex gap-2 mb-8">
+            {
+              LOGO_COLORS.map((color) => (
+                <button
+                  key={color.name}
+                  onClick={() => setLogoColor(color)}
+                  className={classNames('w-8 h-8 rounded-full border', {
+                    'ring-2 ring-gray-500': logoColor.name === color.name,
+                    'border-gray-300': logoColor.name !== color.name
+                  })}
+                  style={{ backgroundColor: LOGO_COLORS.find(c => c.name === color.name).code }}
+                  aria-label={`Logo color ${color.name}`}
+                />
+              ))
+            }
+          </div>
+          <div className="mb-6 w-64">
             <input
               className="w-full"
               name="scale"
@@ -173,9 +230,19 @@ function App() {
             <label htmlFor="flag">Добавьте свой флаг: </label>
             <select name="flag" id="flag" onChange={onFlagChange} value={flag} className="w-full mt-2 bg-transparent border border-gray-300 px-4 py-2 pr-8 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
               <option value="">Выберите республику</option>
-              {REPUBLICS.map(rep => (
-                <option key={rep.name} value={rep.image}>{ rep.name }</option>
-              ))}
+              {
+                REPUBLICS
+                  .sort((a, b) => {
+                    const nameA = a.name.toUpperCase();
+                    const nameB = b.name.toUpperCase();
+                    if (nameA < nameB) return -1;
+                    if (nameA > nameB) return 1;
+                    return 0;
+                  })
+                  .map(rep => (
+                    <option key={rep.name} value={rep.image}>{ rep.name }</option>
+                  ))
+              }
             </select>
           </div>
           <div className="mb-4">
