@@ -30,6 +30,8 @@ function App() {
     { name: 'Ичкерия', image: 'ichkeria.png' },
     { name: 'Тыва', image: 'tyva.svg' },
     { name: 'Алтай', image: 'altai.png' },
+    { name: 'Татарская Республика', value: 'tatarstan-azaltyk.png' },
+    { name: 'Хакасия', value: 'khakassia.svg' },
   ]
 
   const editorRef = useRef(null);
