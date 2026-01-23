@@ -143,7 +143,7 @@ function App() {
 
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'my_avatar.png';
+      a.download = 'my_profile_image.png';
       a.click();
 
       URL.revokeObjectURL(url);
