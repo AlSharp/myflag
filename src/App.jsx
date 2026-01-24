@@ -32,6 +32,7 @@ function App() {
     { name: 'Алтай', image: 'altai.png' },
     { name: 'Татарская Республика', image: 'tatarstan-azaltyk.png' },
     { name: 'Хакасия', image: 'khakassia.svg' },
+    { name: 'Өөрд Орн-Нутг', image: 'oord-orn-nutg.png' },
   ]
 
   const editorRef = useRef(null);
